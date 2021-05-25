@@ -39,15 +39,14 @@
     <td><?php echo $data->your_email;?></td>
     <td><?php echo $data->your_comments;?></td>
 
-    <td><button id="element" class="btn btn-default show-modal" 
-             onclick="edit_contact('<?php echo $data->id;?>')" >edit</button>
+    <td><button id="element" class="show-modal" 
+             onClick="edit_contact('<?php echo $data->id;?>');" >edit</button>
       
   </tr>
   <?php
 }
 ?>
 </table>
-
 
 <div id="testmodal" class="modal fade">
     <div class="modal-dialog">

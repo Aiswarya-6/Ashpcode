@@ -91,35 +91,27 @@ function ash_admin_menu_sub_archive()
    include_once("ashformdata.php");
    echo '<h2><a href="http://localhost/wordpress/uontact-us/">CONTACT US</a></h2><br>';
 }
-function ashform_footer_action_javascript() { ?>
-
+function ashform_footer_action_javascript()
+ { 
+  ?>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script type="text/javascript">
 
+<script>
+
+function edit_contact($id)
+
+{
 $(document).ready(function(){
-  var show_btn=$('.show-modal');
-  var show_btn=$('.show-modal');
-  //$("#testmodal").modal('show');
-  
-    show_btn.click(function(){
-      $("#testmodal").modal('show');
-  })
-});
 
-$(function() {
-        $('#element').on('click', function( e ) {
-            Custombox.open({
-                target: '#testmodal-1',
-                effect: 'fadein'
-            });
-            e.preventDefault();
-        });
+  $('#element').on('click',(function(){
+
+    $('#testmodal').modal('show')
+  });
     });
 
 ajaxurl = '<?php echo admin_url( 'admin-ajax.php' ) ?>';
-
-function edit_contact(id)
-       {
 
 var id = id;
       $.ajax({
@@ -137,11 +129,11 @@ var id = id;
           jQuery('#mail').val(responseData.your_email);
           jQuery('#comments').val(responseData.your_comments);
           
-       success: function(show)
+        }
+        success: function(show)
       {
         $("#testmodal").modal('show');
       }
-        }
       });
 </script>
 add_action( 'wp_footer', 'ashform_footer_action_javascript' );
