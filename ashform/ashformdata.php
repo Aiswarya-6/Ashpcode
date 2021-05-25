@@ -76,7 +76,7 @@
               <br>
               <div class="modal-footer">
                <tr colspan="2">
-                <td colspan="2"><center><input type="submit" name="submit"  class="btn  btn-success"></center></td>
+                <td colspan="2"><center><input type="submit" name="edit"  class="btn  btn-success"></center></td>
               </tr>
             </div>
             </table>
@@ -87,8 +87,4 @@
     </div>
 </div>
 </body>
-<script type="text/javascript">
-  
-</script>
-
 </html>

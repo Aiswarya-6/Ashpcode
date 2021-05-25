@@ -67,60 +67,34 @@ function form_capture()
 }
 add_action('wp_head','form_capture');
 
-function ashdisplay()
-{
-    include_once("ashformdata.php");
-}
 function ash_admin_menu()
 {
-add_menu_page('forms','AshForms','manage_options','ash_admin_menu','ash_admin_menu_main','dashicons-book',6);
-  add_submenu_page('ash_admin_menu','ashform','Data',
-  'manage_options','ash_admin_menu_sub_archive','ash_admin_menu_sub_archive');
+ add_menu_page('forms','AshForms','manage_options','ash_admin_menu','ash_admin_menu_main','dashicons-book',6);
+  add_submenu_page('ash_admin_menu','ashform','Archive',
+  'manage_options','ash_admin_menu_sub_archive',);
 }
 
 add_action('admin_menu','ash_admin_menu');
-
 function ash_admin_menu_main()
 {
-   
+  include(plugin_dir_path(__FILE__).'ashformdata.php');
+  add_action( 'admin_footer', 'ashform_footer_action_javascript' );
 }
-add_shortcode('data','ash_admin_menu_main');
+function ashform_footer_action_javascript() { ?>
 
-function ash_admin_menu_sub_archive()
-{
-   include_once("ashformdata.php");
-   echo '<h2><a href="http://localhost/wordpress/uontact-us/">CONTACT US</a></h2><br>';
-}
-function ashform_footer_action_javascript()
- { 
-  ?>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
+  <script type="text/javascript" >
 
-<script>
-
-function edit_contact($id)
-
-{
-$(document).ready(function(){
-
-  $('#element').on('click',(function(){
-
-    $('#testmodal').modal('show')
-  });
-    });
-
-ajaxurl = '<?php echo admin_url( 'admin-ajax.php' ) ?>';
-
-var id = id;
-      $.ajax({
-      type : "post",
-      action: 'ashform_update',
-      data:{id: id}
-      
-    };
-      jQuery.post(ajaxurl, data, function(response) {
+ function edit_contact(id)
+ {   
+  ajaxurl = '<?php echo admin_url( 'admin-ajax.php' ) ?>';
+  
+  var data = { type : "post", 'action': 'ashform_update','id': id };
+ 
+        jQuery.post(ajaxurl, data, function(response) {
         responseData = jQuery.parseJSON( response );
         if(responseData)
         {
@@ -129,28 +103,52 @@ var id = id;
           jQuery('#mail').val(responseData.your_email);
           jQuery('#comments').val(responseData.your_comments);
           
+          $("#testmodal").modal('show');
         }
-        success: function(show)
-      {
-        $("#testmodal").modal('show');
-      }
       });
-</script>
-add_action( 'wp_footer', 'ashform_footer_action_javascript' );
-<?php
-}
-add_action("wp_ajax_ashform_update" , "ashform_update");
-add_action("wp_ajax_nopriv_ashform_update" , "ashform_update");
+        
+     } 
+        
+        
+  </script>
+  <?php
+  }
+  
+  add_action("wp_ajax_ashform_update" , "ashform_update");
+  add_action("wp_ajax_nopriv_ashform_update" , "ashform_update");
+  
+  function ashform_update()
+  {
+    global $wpdb;
 
-function ashform_update()
-{
-  global $wpdb;
-  $id = $_POST['id'];
-  $query = "SELECT * FROM ".$wpdb->prefix."ashform"." WHERE `id` = $id";
-  $fieldDetails = $wpdb->get_row( $query );
-  echo json_encode($fieldDetails);
-  wp_die();
-}
+    $table_name=$wpdb->prefix.'ashform';
+    $id = $_POST['id'];
+    $query = "SELECT * FROM ".$wpdb->prefix."ashform"." WHERE `id` = $id";
+    $data = $wpdb->get_row( $query );
+      
+            $your_name=$_POST['your_name'];
+            $your_mail=$_POST['your_email'];
+            $your_comments=$_POST['your_comments'];
+
+            if (isset($_POST['edit'])) 
+            {
+
+            $wpdb->update($table_name,
+                  array(
+                        'your_name'=>$your_name,
+                        'your_email'=>$your_mail,
+                        'your_comments'=>$your_comments),
+                  array(
+                         'id'=>$id
+                       )
+                  );
+                
+            } 
+   
+    echo json_encode($data);
+    wp_die();
+  }
+ 
 ?>
 
 
