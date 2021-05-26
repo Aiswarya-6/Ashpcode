@@ -29,7 +29,8 @@
     <th></th>
   </tr>
   <?php
-  
+  if(!empty($result)){
+
     foreach($result as $data)
   {
     ?>
@@ -45,6 +46,7 @@
   </tr>
   <?php
 }
+}
 ?>
 </table>
 
@@ -56,7 +58,9 @@
                 <h4 class="modal-title">Update Your details</h4>
             </div>
             <div class="modal-body">
-                <form method="post" action="" >
+
+              <form method="post" action="" >
+
             <table class="table table-bordered" id="table">
               <tr>
                 <th>Name  </th>
@@ -76,7 +80,7 @@
               <br>
               <div class="modal-footer">
                <tr colspan="2">
-                <td colspan="2"><center><input type="submit" name="edit"  class="btn  btn-success"></center></td>
+                <td colspan="2"><center><input type="submit" name="submit"   class="btn  btn-success"></center></td>
               </tr>
             </div>
             </table>
@@ -86,5 +90,28 @@
         </div>
     </div>
 </div>
+<?php
+
+global $wpdb;
+
+        $id= $data->id;
+    $table_name=$wpdb->prefix.'ashform';
+          
+            if (isset($_POST['submit'])) 
+            {
+
+             $data =array(
+                'your_name' => $_POST['your_name'],
+                'your_email'    => $_POST['your_email'],
+                'your_comments'=>$_POST['your_comments']
+                    );
+            $wherecondition=array( 'id'=>$_POST['id'] );
+
+            $wpdb->update($table_name, $data, $wherecondition);
+                
+            } 
+
+       ?>
 </body>
 </html>
+

@@ -125,29 +125,11 @@ function ashform_footer_action_javascript() { ?>
     $id = $_POST['id'];
     $query = "SELECT * FROM ".$wpdb->prefix."ashform"." WHERE `id` = $id";
     $data = $wpdb->get_row( $query );
-      
-            $your_name=$_POST['your_name'];
-            $your_mail=$_POST['your_email'];
-            $your_comments=$_POST['your_comments'];
-
-            if (isset($_POST['edit'])) 
-            {
-
-            $wpdb->update($table_name,
-                  array(
-                        'your_name'=>$your_name,
-                        'your_email'=>$your_mail,
-                        'your_comments'=>$your_comments),
-                  array(
-                         'id'=>$id
-                       )
-                  );
-                
-            } 
    
     echo json_encode($data);
     wp_die();
   }
+
  
 ?>
 
